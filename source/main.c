@@ -21,18 +21,24 @@ int main(){
     Elevator elevator;
     setFloor(&elevator);
     elevatorInit(&elevator);
+    elevator.targetFloor = 0;
+    elevator.motorDir = DIRN_UP;
 
     Queue queue;
     queueInit(&queue);
     printQueue(&queue);
-
+    
     while(1){
         setFloor(&elevator);
         setPrevFloor(&elevator);
         setLights(&elevator);
-
-        moveTo(&elevator, 2);
+        addToQueue(&queue);
+        printQueue(&queue);
+        checkQueue(&elevator, &queue);
+        activeOrder(&elevator);
+        removeFromQueue(&queue, elevator.prevFloor);
         
+
 
         //Queue testQueue;
         //initializeQueue(testQueue);

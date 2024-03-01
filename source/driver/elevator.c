@@ -1,11 +1,9 @@
 #include "elevator.h"
 
 void elevatorInit(Elevator* elevator){
-
     while(elevio_floorSensor() != 0){
         elevio_motorDirection(DIRN_DOWN);
     }
-
     elevio_motorDirection(DIRN_STOP);
 }
 
@@ -37,4 +35,6 @@ void moveTo(Elevator* elevator, int targetFloor){
     } else if(elevator->currentFloor == targetFloor){
         elevio_motorDirection(DIRN_STOP);
     }
+
+    nanosleep(&(struct timespec){0, 2000*1000*1000}, NULL);
 }

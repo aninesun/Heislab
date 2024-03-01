@@ -1,5 +1,6 @@
 #pragma once
 #include "elevio.h"
+#include "door.h"
 #include <stdbool.h>
 
 typedef struct Elevator{
@@ -7,7 +8,7 @@ typedef struct Elevator{
     MotorDirection motorDir;
     int prevFloor;
     bool isMoving;
-    bool doorOpen;
+    Door door;
     int targetFloor;
 } Elevator;
 

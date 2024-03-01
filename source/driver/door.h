@@ -5,6 +5,7 @@
 typedef struct Door {
     bool isOpen;
     bool obstruction;
+    //struct timespec timer;
 } Door;
 
 void openDoor();

@@ -1,6 +1,7 @@
 #pragma once
 #include <stdio.h>
 #include "elevio.h"
+#include "elevator.h"
 
 typedef struct Order {
     int fromFloor;
@@ -14,10 +15,12 @@ typedef struct Queue {
     //size_t youngestElement;
 } Queue;
 
-Order buttonToOrder(ButtonType button, int floor);
+
 void queueInit(Queue* queue);
 void printQueue(Queue* queue);
-void addToQueue(Queue* queue, Order* order);
+void addToQueue(Queue* queue);
 Order getOrder(Order order);
-void removeFromQueue(Queue queue);
+void removeFromQueue(Queue* queue, int floor);
 void removeAll(Queue* queue);
+void checkQueue(Elevator* elevator, Queue* queue);
+void activeOrder(Elevator* elevator);

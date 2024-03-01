@@ -14,5 +14,5 @@ void setFloorLight(Elevator* elevator){
 
 void setLights(Elevator* elevator){
     setStopLight();
-    setFloorLight(&elevator);
+    setFloorLight(elevator);
 }
