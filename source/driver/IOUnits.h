@@ -1,6 +1,7 @@
 #pragma once
 #include <stdbool.h>
 #include "elevator.h"
+#include "door.h"
 
 typedef struct Lights {
     bool lightsOn;
@@ -8,4 +9,5 @@ typedef struct Lights {
 
 void setStopLight();
 void setFloorLight(Elevator* elevator);
+void setDoorLight(Door* door);
 void setLights(Elevator* elevator);

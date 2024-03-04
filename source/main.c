@@ -18,16 +18,21 @@ int main(){
     printf("=== Example Program ===\n");
     printf("Press the stop button on the elevator panel to exit\n");
 
+    Door door;
+    doorInit(&door);
+
     Elevator elevator;
     setFloor(&elevator);
     elevatorInit(&elevator);
     elevator.targetFloor = 0;
-    elevator.motorDir = DIRN_UP;
+    elevator.motorDir = DIRN_STOP;
+    elevator.start = 0;
+    elevator.door = door;
 
     Queue queue;
     queueInit(&queue);
     printQueue(&queue);
-    
+
     while(1){
         setFloor(&elevator);
         setPrevFloor(&elevator);
@@ -35,8 +40,9 @@ int main(){
         addToQueue(&queue);
         printQueue(&queue);
         checkQueue(&elevator, &queue);
-        activeOrder(&elevator);
-        removeFromQueue(&queue, elevator.prevFloor);
+        removeFromQueue(&elevator, &queue, elevator.lastFloorStopped);
+        openDoor(&elevator, &door);
+        shouldDoorStayOpen(&elevator, &door);
         
 
 
