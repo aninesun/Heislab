@@ -18,6 +18,7 @@ void printQueue(Queue* queue){
         }
         printf("\n");
     }
+    printf("\n");
 }
 
 void addToQueue(Queue* queue){
@@ -54,7 +55,7 @@ Order getOrder(Order order){
     return order;
 }
 
-void checkQueue(Elevator* elevator, Queue* queue){
+void checkQueue(Elevator* elevator, Door* door, Queue* queue){
     for(int f = 0; f < N_FLOORS; f++){
         for(int b = 0; b < N_BUTTONS; b++){
             if(queue->queuesystem[f][b] == 1){
@@ -87,7 +88,11 @@ void checkQueue(Elevator* elevator, Queue* queue){
             }
         }
     }
-    moveTo(elevator, elevator->targetFloor);
+
+    printf("prevFloor %d \n", elevator->prevFloor);
+    printf("target %d \n", elevator->targetFloor);
+    
+    moveTo(elevator, door, elevator->targetFloor);
 
     if(elevator->prevFloor > elevator->targetFloor){
         elevator->motorDir = DIRN_DOWN;
@@ -95,8 +100,6 @@ void checkQueue(Elevator* elevator, Queue* queue){
         elevator->motorDir = DIRN_UP;
     } else {
         elevator->motorDir = DIRN_STOP;
-    }
-    printf("Motor direction: %d\n", elevator->motorDir);
-
+    }    
 }
 

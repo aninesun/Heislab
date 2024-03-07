@@ -24,45 +24,30 @@ int main(){
     Elevator elevator;
     setFloor(&elevator);
     elevatorInit(&elevator);
+    elevator.prevFloor = 0;
     elevator.targetFloor = 0;
+    
     elevator.motorDir = DIRN_STOP;
-    elevator.start = 0;
     elevator.door = door;
+    elevator.hasMoved = 0;
 
     Queue queue;
     queueInit(&queue);
     printQueue(&queue);
 
+    int startTime = 0;
+
     while(1){
         setFloor(&elevator);
         setPrevFloor(&elevator);
-        setLights(&elevator);
+        checkStopButton(&elevator, &door, &queue);
+        setLights(&elevator, &door);
         addToQueue(&queue);
         printQueue(&queue);
-        checkQueue(&elevator, &queue);
+        checkQueue(&elevator, &door, &queue);
         removeFromQueue(&elevator, &queue, elevator.lastFloorStopped);
-        openDoor(&elevator, &door);
         shouldDoorStayOpen(&elevator, &door);
-        
-
-
-        //Queue testQueue;
-        //initializeQueue(testQueue);
-        //printQueue(testQueue.firstOrder);
-
-/*      
-
-        /* for(int f = 0; f < N_FLOORS; f++){
-            for(int b = 0; b < N_BUTTONS; b++){
-                int btnPressed = elevio_callButton(f, b);
-                elevio_buttonLamp(f, b, btnPressed);
-            }
-        } */
-        
-        if(elevio_stopButton()){
-            elevio_motorDirection(DIRN_STOP);
-            break;
-        }
+        checkObstruction(&door);
         
         nanosleep(&(struct timespec){0, 20*1000*1000}, NULL);
     }

@@ -25,4 +25,4 @@ void addToQueue(Queue* queue);
 Order getOrder(Order order);
 void removeFromQueue(Elevator* elevator, Queue* queue, int floor);
 void removeAll(Queue* queue);
-void checkQueue(Elevator* elevator, Queue* queue);
+void checkQueue(Elevator* elevator, Door* door, Queue* queue);

@@ -17,63 +17,66 @@ void setPrevFloor(Elevator* elevator){
     }
 }
 
-void moveTo(Elevator* elevator, int targetFloor){
-    printf("Current floor: %d\n", elevator->currentFloor);
+void moveTo(Elevator* elevator, Door* door, int targetFloor){
+    //printf("Current floor: %d\n", elevator->currentFloor);
+    if(door->isOpen == false){
+        if(elevator->currentFloor < targetFloor && elevator->currentFloor != -1){
+            elevio_motorDirection(DIRN_UP);
+            if(elevator->currentFloor == targetFloor){
+                elevio_motorDirection(DIRN_STOP);
+            }
+            elevator->hasMoved = 1;
 
-    if(elevator->currentFloor < targetFloor && elevator->currentFloor != -1){
-        elevio_motorDirection(DIRN_UP);
-        if(elevator->currentFloor == targetFloor){
-            printf("Riktig etasje");
+        } else if(elevator->currentFloor > targetFloor && elevator->currentFloor != -1){
+            elevio_motorDirection(DIRN_DOWN);
+            if(elevator->currentFloor == targetFloor){
+                elevio_motorDirection(DIRN_STOP);
+            }
+            elevator->hasMoved = 1;
+
+        } else if(elevator->currentFloor == targetFloor){
             elevio_motorDirection(DIRN_STOP);
+            elevator->lastFloorStopped = elevator->currentFloor;
+
+            if(elevator->hasMoved == 1){
+                door->isOpen = true;
+                elevator->justStopped = true;
+                openDoor(door);
+                elevator->hasMoved = 0;
+            }
         }
-    } else if(elevator->currentFloor > targetFloor && elevator->currentFloor != -1){
-        elevio_motorDirection(DIRN_DOWN);
-        if(elevator->currentFloor == targetFloor){
-            printf("Riktig etasje");
-            elevio_motorDirection(DIRN_STOP);
-        }
-    } else if(elevator->currentFloor == targetFloor){
-        elevio_motorDirection(DIRN_STOP);
-        elevator->lastFloorStopped = elevator->currentFloor;
     }
 
-    nanosleep(&(struct timespec){0, 2000*1000*1000}, NULL);
+    //nanosleep(&(struct timespec){0, 2000*1000*1000}, NULL);
 }
-
 
 void doorInit(Door* door){
     door->isOpen = false;
     door->obstruction = false;
     door->startTime = 0;
-    door->difference = 3;
 }
 
-void openDoor(Elevator* elevator, Door* door){
-    int bareEnGang = 0;
-    printf("AUGUST \n");
-    printf("Motor direction: %d\n", elevator->motorDir);
-    printf("Obstruction: %d\n", elevio_obstruction());
-    printf("Door open: %d\n", door->isOpen);
+void openDoor(Door* door){
+    door->timer = (int) time(NULL);
+}
 
-    if(elevator->motorDir == DIRN_STOP && elevio_obstruction() == 0){
-        printf("musling");
-        bareEnGang = 1;
+void timeEnd(Elevator* elevator, Door* door){
+    if((time(NULL) - door->timer) <= 3){
         door->isOpen = true;
-        door->startTime = clock();
+    } else {
+        door->isOpen = false;
+        elevator->justStopped = false;
     }
 }
 
 void shouldDoorStayOpen(Elevator* elevator, Door* door){
-    if(door->isOpen == true){
-        /* if(elevio_obstruction() == 1){
-            door->startTime = clock();
-        } */
-        if((clock() - door->startTime) / CLOCKS_PER_SEC > door->difference){ //blir door->starttime resett hele tiden
-            door->isOpen = false;
-        }
+    if(elevator->justStopped && door->isOpen){
+        timeEnd(elevator, door);
     }
 }
 
-void closeDoor(){
-    
+void checkObstruction(Door* door){
+    if(!elevio_obstruction()){
+        openDoor(&door);
+    }
 }

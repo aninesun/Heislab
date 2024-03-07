@@ -3,6 +3,7 @@
 #include "door.h"
 #include <stdbool.h>
 #include <time.h>
+#include <stdio.h>
 
 typedef struct Door {
     bool isOpen;
@@ -10,6 +11,7 @@ typedef struct Door {
     int startTime;
     int difference;
     //struct timespec timer;
+    int timer;
 } Door;
 typedef struct Elevator{
     int currentFloor;
@@ -19,14 +21,18 @@ typedef struct Elevator{
     Door door;
     int targetFloor;
     int lastFloorStopped;
-    int start;
+    //int start;
+    bool justStopped;
+    int hasMoved;
 } Elevator;
 
 void setFloor(Elevator* elevator);
 void elevatorInit(Elevator* elevator);
-void moveTo(Elevator* elevator, int targetFloor);
+void moveTo(Elevator* elevator, Door* door, int targetFloor);
 
 void doorInit(Door* door);
-void openDoor(Elevator* elevator, Door* door);
+void openDoor(Door* door);
+void timeEnd(Elevator* elevator, Door* door);
 void shouldDoorStayOpen(Elevator* elevator, Door* door);
-void closeDoor();
+
+void checkObstruction(Door* door);
