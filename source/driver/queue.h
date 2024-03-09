@@ -26,3 +26,4 @@ Order getOrder(Order order);
 void removeFromQueue(Elevator* elevator, Queue* queue, int floor);
 void removeAll(Queue* queue);
 void checkQueue(Elevator* elevator, Door* door, Queue* queue);
+void checkForEmptyQueue(Elevator* elevator, Queue* queue);

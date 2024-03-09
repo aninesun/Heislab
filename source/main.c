@@ -26,6 +26,7 @@ int main(){
     elevatorInit(&elevator);
     elevator.prevFloor = 0;
     elevator.targetFloor = 0;
+    elevator.isEmptyQueue = 0;
     
     elevator.motorDir = DIRN_STOP;
     elevator.door = door;
@@ -41,6 +42,7 @@ int main(){
         setFloor(&elevator);
         setPrevFloor(&elevator);
         checkStopButton(&elevator, &door, &queue);
+        openWhenStopped(&elevator, &door);
         setLights(&elevator, &door);
         addToQueue(&queue);
         printQueue(&queue);
@@ -48,6 +50,7 @@ int main(){
         removeFromQueue(&elevator, &queue, elevator.lastFloorStopped);
         shouldDoorStayOpen(&elevator, &door);
         checkObstruction(&door);
+        checkForEmptyQueue(&elevator, &queue);
         
         nanosleep(&(struct timespec){0, 20*1000*1000}, NULL);
     }

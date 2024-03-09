@@ -20,30 +20,72 @@ void setPrevFloor(Elevator* elevator){
 void moveTo(Elevator* elevator, Door* door, int targetFloor){
     //printf("Current floor: %d\n", elevator->currentFloor);
     if(door->isOpen == false){
-        if(elevator->currentFloor < targetFloor && elevator->currentFloor != -1){
-            elevio_motorDirection(DIRN_UP);
-            if(elevator->currentFloor == targetFloor){
-                elevio_motorDirection(DIRN_STOP);
+        if(elevator->isEmptyQueue == 0){
+            if(elevator->hasUsedStopButton == true && elevio_stopButton() == 0){
+                if(elevator->currentFloor == elevator->targetFloor && elevator->targetFloor != -1){
+                    elevio_motorDirection(DIRN_STOP);
+                    //elevator->motorDir = DIRN_STOP;
+                } else if(elevator->prevMotorDir == DIRN_UP){
+                    elevator->hasUsedStopButton = false;
+                    //printf("SHAKLDHAKWDHAWHDØKIWAHØKDHAØIDHWA");
+                    if(elevator->currentFloor == elevator->targetFloor){
+                        elevio_motorDirection(DIRN_STOP);
+                        //elevator->motorDir = DIRN_STOP;
+                    } if(elevator->prevFloor > elevator->targetFloor){
+                        elevio_motorDirection(DIRN_DOWN);
+                        //elevator->motorDir = DIRN_DOWN;
+                        elevator->hasMoved = 1;
+                    } else if(elevator->prevFloor <= elevator->targetFloor){
+                        elevio_motorDirection(DIRN_UP);
+                        //printf("gh");
+                        //elevator->motorDir = DIRN_UP;
+                        elevator->hasMoved = 1;
+                    }
+                } else if(elevator->prevMotorDir == DIRN_DOWN){
+                        elevator->hasUsedStopButton = false;
+                        if(elevator->currentFloor == elevator->targetFloor){
+                            elevio_motorDirection(DIRN_STOP);
+                            //elevator->motorDir = DIRN_STOP;
+                        } if(elevator->prevFloor >= elevator->targetFloor){
+                            elevio_motorDirection(DIRN_DOWN);
+                            //elevator->motorDir = DIRN_DOWN;
+                            elevator->hasMoved = 1;
+                        } else if(elevator->prevFloor < elevator->targetFloor){
+                            elevio_motorDirection(DIRN_UP);
+                            //elevator->motorDir = DIRN_UP;
+                            elevator->hasMoved = 1;
+                        }
+                    }
             }
-            elevator->hasMoved = 1;
+            
+            if(elevator->currentFloor < targetFloor && elevator->currentFloor != -1){
+                elevio_motorDirection(DIRN_UP);
+                if(elevator->currentFloor == targetFloor){
+                    elevio_motorDirection(DIRN_STOP);
+                }
+                elevator->hasMoved = 1;
 
-        } else if(elevator->currentFloor > targetFloor && elevator->currentFloor != -1){
-            elevio_motorDirection(DIRN_DOWN);
-            if(elevator->currentFloor == targetFloor){
+            } else if(elevator->currentFloor > targetFloor && elevator->currentFloor != -1){
+                elevio_motorDirection(DIRN_DOWN);
+                if(elevator->currentFloor == targetFloor){
+                    elevio_motorDirection(DIRN_STOP);
+                }
+                elevator->hasMoved = 1;
+
+            } else if(elevator->currentFloor == targetFloor){
                 elevio_motorDirection(DIRN_STOP);
-            }
-            elevator->hasMoved = 1;
+                elevator->lastFloorStopped = elevator->currentFloor;
 
-        } else if(elevator->currentFloor == targetFloor){
+                if(elevator->hasMoved == 1){
+                    door->isOpen = true;
+                    elevator->justStopped = true;
+                    openDoor(door);
+                    elevator->hasMoved = 0;
+                }
+            }
+        } else {
             elevio_motorDirection(DIRN_STOP);
-            elevator->lastFloorStopped = elevator->currentFloor;
-
-            if(elevator->hasMoved == 1){
-                door->isOpen = true;
-                elevator->justStopped = true;
-                openDoor(door);
-                elevator->hasMoved = 0;
-            }
+            //elevator->motorDir = DIRN_STOP;
         }
     }
 
@@ -76,7 +118,18 @@ void shouldDoorStayOpen(Elevator* elevator, Door* door){
 }
 
 void checkObstruction(Door* door){
-    if(!elevio_obstruction()){
-        openDoor(&door);
+    //SPØRS HVILKEN HEIS VI HAR
+    if(elevio_obstruction()){
+        openDoor(door);
+    }
+    /* if(!elevio_obstruction()){
+        openDoor(door);
+    } */
+}
+
+void openWhenStopped(Elevator* elevator, Door* door){
+    if(elevio_stopButton() == 1 && elevator->currentFloor != -1){
+        openDoor(door);
+        door->isOpen = true;
     }
 }

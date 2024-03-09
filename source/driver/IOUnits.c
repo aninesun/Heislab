@@ -28,16 +28,20 @@ void setLights(Elevator* elevator, Door* door){
 
 void checkStopButton(Elevator* elevator, Door* door, Queue* queue){
     if(elevio_stopButton()){
-        MotorDirection prevDir = elevator->motorDir;
+        elevator->prevMotorDir = elevator->motorDir;
         elevio_motorDirection(DIRN_STOP);
+        elevator->motorDir = DIRN_STOP;
         removeAll(queue);
-        if(elevio_floorSensor() != -1){
-            openDoor(door);
+        elevator->hasUsedStopButton = 1;
+        elevator->justStopped = 1;
+
+        if(elevator->currentFloor == -1){
+            elevator->targetFloor = -1; //burde vi ha denne??
         }
 
-        if(!elevio_stopButton()){
+/*         if(!elevio_stopButton()){
             elevio_motorDirection(prevDir);
             printf("Dir %d, \n", prevDir);
-        }
+        } */
     }
 }
