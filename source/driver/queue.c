@@ -58,8 +58,9 @@ Order getOrder(Order order){
 void checkQueue(Elevator* elevator, Door* door, Queue* queue){
     for(int f = 0; f < N_FLOORS; f++){
         for(int b = 0; b < N_BUTTONS; b++){
-            if(elevator->isEmptyQueue == 1 && elevator->currentFloor == -1 && elevator->hasUsedStopButton){
+            if(elevator->isEmptyQueue == 1 && elevator->currentFloor == -1 && elevator->hasUsedStopButton == true){ //elevator->isEmptyQueue == 1 && 
                 elevator->targetFloor = -1;
+                printf("Target satt til -1 \n");
                 //elevio_motorDirection(DIRN_STOP);
             }
             
@@ -67,11 +68,57 @@ void checkQueue(Elevator* elevator, Door* door, Queue* queue){
             //printf("Kø er tom: %d\n", elevator->isEmptyQueue);
 
             if(queue->queuesystem[f][b] == 1){
-                if(elevator->motorDir != DIRN_DOWN && elevator->prevFloor < f && b != BUTTON_HALL_DOWN && elevator->targetFloor >= f){
-                    elevator->targetFloor = f;
+                printf("HEISANN \n");
+                printf("F: %d\n", f);
+                if(elevator->motorDir != DIRN_DOWN){
+                    printf("IKKE DOWN");
                 }
-                else if(elevator->motorDir != DIRN_UP && elevator->prevFloor > f && b != BUTTON_HALL_UP && elevator->targetFloor <= f){
+                if(elevator->prevFloor <= f){
+                    printf("IKKE PREVFLOOR");
+                }
+                if(b != BUTTON_HALL_DOWN){
+                    printf("IKKE BUTTON");
+                }
+
+
+                if(elevator->hasUsedStopButton == 0){
+                    if(elevator->motorDir != DIRN_DOWN && elevator->prevFloor < f && b != BUTTON_HALL_DOWN && elevator->targetFloor >= f) {
+                        elevator->targetFloor = f;
+                        printf("AAAAAAAAAAAAA \n");
+                    }
+                    else if(elevator->motorDir != DIRN_UP && elevator->prevFloor > f && b != BUTTON_HALL_UP && elevator->targetFloor <= f){
+                        elevator->targetFloor = f;
+                        printf("BBBBBBB \n");
+                    } else if (elevator->motorDir == DIRN_STOP){
+                        elevator->targetFloor = f;
+                        //printf("WÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆ \n");
+                        //printf("f: %d \n", f);
+                    }  else {
+                        //printf("ingenting skjedde \n");
+                    }
+                } if(elevator->hasUsedStopButton){
+                    if(elevator->motorDir != DIRN_DOWN && elevator->prevFloor <= f && b != BUTTON_HALL_DOWN && (elevator->targetFloor >= f || elevator->targetFloor == -1)){
+                        elevator->targetFloor = f;
+                        printf("AAAAAAAAAAAAA \n");
+                    }
+                    else if(elevator->motorDir != DIRN_UP && elevator->prevFloor >= f && b != BUTTON_HALL_UP && (elevator->targetFloor <= f || elevator->targetFloor == -1)){
+                        elevator->targetFloor = f;
+                        printf("BBBBBBB \n");
+                    } else if (elevator->motorDir == DIRN_STOP){
+                        elevator->targetFloor = f;
+                        //printf("WÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆ \n");
+                        //printf("f: %d \n", f);
+                    }  else {
+                        //printf("ingenting skjedde \n");
+                    }
+                }
+                if(elevator->motorDir != DIRN_DOWN && elevator->prevFloor <= f && b != BUTTON_HALL_DOWN && (elevator->targetFloor >= f || elevator->targetFloor == -1)){
                     elevator->targetFloor = f;
+                    printf("AAAAAAAAAAAAA \n");
+                }
+                else if(elevator->motorDir != DIRN_UP && elevator->prevFloor >= f && b != BUTTON_HALL_UP && (elevator->targetFloor <= f || elevator->targetFloor == -1)){
+                    elevator->targetFloor = f;
+                    printf("BBBBBBB \n");
                 } else if (elevator->motorDir == DIRN_STOP){
                     elevator->targetFloor = f;
                     //printf("WÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆÆ \n");
@@ -94,9 +141,9 @@ void checkQueue(Elevator* elevator, Door* door, Queue* queue){
     if(elevator->hasUsedStopButton && elevator->currentFloor == -1){
         elevator->motorDir = DIRN_STOP;
     }
-    if(elevator->prevFloor > elevator->targetFloor){ //elevator->currentFloor != -1
+    if(elevator->prevFloor > elevator->targetFloor && elevator->targetFloor != -1){ //elevator->currentFloor != -1
         elevator->motorDir = DIRN_DOWN;
-    } else if(elevator->prevFloor < elevator->targetFloor){ //elevator->currentFloor != -1
+    } else if(elevator->prevFloor < elevator->targetFloor && elevator->targetFloor != -1){ //elevator->currentFloor != -1
         elevator->motorDir = DIRN_UP;
     } else {
         elevator->motorDir = DIRN_STOP;

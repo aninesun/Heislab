@@ -21,12 +21,12 @@ typedef struct Elevator{
     Door door;
     int targetFloor;
     int lastFloorStopped;
-    //int start;
     bool justStopped;
     int hasMoved;
     bool hasUsedStopButton;
     MotorDirection prevMotorDir;
     bool isEmptyQueue;
+    bool hasInitialised;
 } Elevator;
 
 void setFloor(Elevator* elevator);

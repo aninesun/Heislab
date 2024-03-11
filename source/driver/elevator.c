@@ -18,6 +18,82 @@ void setPrevFloor(Elevator* elevator){
 }
 
 void moveTo(Elevator* elevator, Door* door, int targetFloor){
+    if(door->isOpen == false){
+        if(elevio_stopButton() == 0){
+            printf("Previous motor direction: %d\n", elevator->prevMotorDir);
+            printf("Target floor: %d\n", elevator->targetFloor);
+            printf("Previous floor: %d\n", elevator->prevFloor);
+
+            if(elevator->currentFloor == elevator->targetFloor && elevator->targetFloor == -1){
+                //elevio_motorDirection(DIRN_STOP);
+                //elevator->motorDir = DIRN_STOP;
+                //printf("HOLD THE DOOR\n");
+            }
+
+            if(elevator->currentFloor == elevator->targetFloor && elevator->targetFloor != -1){
+                elevio_motorDirection(DIRN_STOP);
+                //elevator->motorDir = DIRN_STOP;
+                elevator->hasUsedStopButton = false;
+            } else if(elevator->currentFloor == -1 && elevator->targetFloor != -1){
+                if(elevator->prevMotorDir == DIRN_UP){
+                    if(elevator->targetFloor > elevator->prevFloor){
+                        elevio_motorDirection(DIRN_UP);
+                        //elevator->motorDir = DIRN_UP;
+                        elevator->hasMoved = 1;
+                    } else if(elevator->targetFloor <= elevator->prevFloor){
+                        elevio_motorDirection(DIRN_DOWN);
+                        //elevator->motorDir = DIRN_DOWN;
+                    }
+                } else if(elevator->prevMotorDir == DIRN_DOWN){
+                    if(elevator->targetFloor < elevator->prevFloor){
+                        elevio_motorDirection(DIRN_DOWN);
+                        //elevator->motorDir = DIRN_DOWN;
+                    } else if(elevator->targetFloor >= elevator->prevFloor){
+                        elevio_motorDirection(DIRN_UP);
+                        //elevator->motorDir = DIRN_UP;
+                    }
+                }
+            }    
+        } 
+        
+        if(elevator->isEmptyQueue == 0){
+                if(elevator->prevFloor < targetFloor && elevator->currentFloor != -1){
+                    elevio_motorDirection(DIRN_UP);
+                if(elevator->currentFloor == targetFloor){
+                    elevio_motorDirection(DIRN_STOP);
+                    }
+                    elevator->hasMoved = 1;
+
+            } else if(elevator->prevFloor > targetFloor && elevator->currentFloor != -1){
+                elevio_motorDirection(DIRN_DOWN);
+                if(elevator->currentFloor == targetFloor){
+                    elevio_motorDirection(DIRN_STOP);
+                }
+                elevator->hasMoved = 1;
+            } else if(elevator->currentFloor == targetFloor){
+                elevio_motorDirection(DIRN_STOP);
+                elevator->lastFloorStopped = elevator->currentFloor;
+                elevator->hasMoved = 1;
+
+                if(elevator->hasInitialised){
+                    if(elevator->hasMoved == 1 && elevator->currentFloor != -1){
+                        door->isOpen = true;
+                        elevator->justStopped = true;
+                        openDoor(door);
+                        elevator->hasMoved = 0;
+                    }
+                }
+                elevator->hasInitialised = true;
+                
+            }
+            } else {
+            elevio_motorDirection(DIRN_STOP);
+        }
+    }
+}
+
+
+/* void moveTo(Elevator* elevator, Door* door, int targetFloor){
     //printf("Current floor: %d\n", elevator->currentFloor);
     if(door->isOpen == false){
         if(elevator->isEmptyQueue == 0){
@@ -90,7 +166,7 @@ void moveTo(Elevator* elevator, Door* door, int targetFloor){
     }
 
     //nanosleep(&(struct timespec){0, 2000*1000*1000}, NULL);
-}
+} */
 
 void doorInit(Door* door){
     door->isOpen = false;
