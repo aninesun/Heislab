@@ -1,37 +1,32 @@
 #pragma once
 #include "elevio.h"
-#include "door.h"
 #include <stdbool.h>
 #include <time.h>
 #include <stdio.h>
 
 typedef struct Door {
     bool isOpen;
-    bool obstruction;
-    int startTime;
-    int difference;
-    //struct timespec timer;
     int timer;
 } Door;
 typedef struct Elevator{
-    int currentFloor;
-    MotorDirection motorDir;
-    int prevFloor;
-    bool isMoving;
+    bool hasInitialised;
     Door door;
+    int currentFloor;
+    int prevFloor;
     int targetFloor;
     int lastFloorStopped;
     bool justStopped;
+    bool isMoving;
     int hasMoved;
     bool hasUsedStopButton;
-    MotorDirection prevMotorDir;
     bool isEmptyQueue;
-    bool hasInitialised;
+    MotorDirection motorDir;
+    MotorDirection prevMotorDir;
 } Elevator;
 
 void setFloor(Elevator* elevator);
 void elevatorInit(Elevator* elevator);
-void moveTo(Elevator* elevator, Door* door, int targetFloor);
+void moveTo(Elevator* elevator, Door* door);
 
 void doorInit(Door* door);
 void openDoor(Door* door);
