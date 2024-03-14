@@ -52,7 +52,7 @@ void removeAll(Queue* queue){
 void checkQueue(Elevator* elevator, Door* door, Queue* queue){
     for(int f = 0; f < N_FLOORS; f++){
         for(int b = 0; b < N_BUTTONS; b++){
-            if(elevator->isEmptyQueue == 1 && elevator->currentFloor == -1 && elevator->hasUsedStopButton == true){ //elevator->isEmptyQueue == 1 && 
+            if(elevator->queueEmpty == 1 && elevator->currentFloor == -1 && elevator->hasUsedStopButton == true){ //elevator->isEmptyQueue == 1 && 
                 elevator->targetFloor = -1;
             }
 
