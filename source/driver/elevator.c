@@ -41,7 +41,7 @@ void moveTo(Elevator* elevator, Door* door){
             }    
         } 
         
-        if(elevator->isEmptyQueue == 0){
+        if(elevator->queueEmpty == 0){
             if(elevator->prevFloor < elevator->targetFloor && elevator->currentFloor != -1){
                 elevio_motorDirection(DIRN_UP);
                 if(elevator->currentFloor == elevator->targetFloor){
@@ -96,12 +96,6 @@ void timeEnd(Elevator* elevator, Door* door){
 void shouldDoorStayOpen(Elevator* elevator, Door* door){
     if(elevator->justStopped && door->isOpen){
         timeEnd(elevator, door);
-    }
-}
-
-void checkObstruction(Door* door){
-    if(elevio_obstruction()){
-        openDoor(door);
     }
 }
 

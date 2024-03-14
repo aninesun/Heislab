@@ -38,10 +38,11 @@ void checkStopButton(Elevator* elevator, Door* door, Queue* queue){
         if(elevator->currentFloor == -1){
             elevator->targetFloor = -1; //burde vi ha denne??
         }
+    }
+}
 
-/*         if(!elevio_stopButton()){
-            elevio_motorDirection(prevDir);
-            printf("Dir %d, \n", prevDir);
-        } */
+void checkObstruction(Door* door){
+    if(elevio_obstruction()){
+        openDoor(door);
     }
 }

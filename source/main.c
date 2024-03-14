@@ -21,7 +21,7 @@ int main(){
 
     elevator.prevFloor = 0;
     elevator.targetFloor = 0;
-    elevator.isEmptyQueue = 0;
+    elevator.queueEmpty = 0;
     door.isOpen = false;
     elevator.hasUsedStopButton = 0;
     elevator.hasInitialised = false;

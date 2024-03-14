@@ -19,7 +19,7 @@ typedef struct Elevator{
     bool isMoving;
     int hasMoved;
     bool hasUsedStopButton;
-    bool isEmptyQueue;
+    bool queueEmpty;
     MotorDirection motorDir;
     MotorDirection prevMotorDir;
 } Elevator;
@@ -32,5 +32,4 @@ void doorInit(Door* door);
 void openDoor(Door* door);
 void timeEnd(Elevator* elevator, Door* door);
 void shouldDoorStayOpen(Elevator* elevator, Door* door);
-void checkObstruction(Door* door);
 void openWhenStopped(Elevator* elevator, Door* door);

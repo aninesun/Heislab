@@ -114,5 +114,5 @@ void checkForEmptyQueue(Elevator* elevator, Queue* queue){
             }    
         }
     }
-    elevator->isEmptyQueue = queueIsEmpty;
+    elevator->queueEmpty = queueIsEmpty;
 }
