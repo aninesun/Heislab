@@ -27,7 +27,6 @@ void moveTo(Elevator* elevator, Door* door){
                 if(elevator->prevMotorDir == DIRN_UP){
                     if(elevator->targetFloor > elevator->prevFloor){
                         elevio_motorDirection(DIRN_UP);
-                        elevator->hasMoved = 1;
                     } else if(elevator->targetFloor <= elevator->prevFloor){
                         elevio_motorDirection(DIRN_DOWN);
                     }
@@ -47,41 +46,24 @@ void moveTo(Elevator* elevator, Door* door){
                 if(elevator->currentFloor == elevator->targetFloor){
                     elevio_motorDirection(DIRN_STOP);
                 }
-                elevator->hasMoved = 1;
             } else if(elevator->prevFloor > elevator->targetFloor && elevator->currentFloor != -1){
                 elevio_motorDirection(DIRN_DOWN);
                 if(elevator->currentFloor == elevator->targetFloor){
                     elevio_motorDirection(DIRN_STOP);
                 }
-                elevator->hasMoved = 1;
             } else if(elevator->currentFloor == elevator->targetFloor){
-                elevio_motorDirection(DIRN_STOP);
-                elevator->lastFloorStopped = elevator->currentFloor;
-                elevator->hasMoved = 1;
-
-                if(elevator->hasInitialised){
-                    if(elevator->hasMoved == 1 && elevator->currentFloor != -1){
-                        door->isOpen = true;
-                        elevator->justStopped = true;
-                        openDoor(door);
-                        elevator->hasMoved = 0;
-                    }
+                elevio_motorDirection(DIRN_STOP);                
+                if(elevator->hasInitialised && elevator->currentFloor != -1){
+                    door->isOpen = true;
+                    elevator->justStopped = true;
+                    openDoor(door);
                 }
                 elevator->hasInitialised = true;
-                
             }
         } else {
             elevio_motorDirection(DIRN_STOP);
         }
     }
-}
-
-void doorInit(Door* door){
-    door->isOpen = false;
-}
-
-void openDoor(Door* door){
-    door->timer = (int) time(NULL);
 }
 
 void timeEnd(Elevator* elevator, Door* door){

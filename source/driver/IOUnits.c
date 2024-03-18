@@ -36,7 +36,7 @@ void checkStopButton(Elevator* elevator, Door* door, Queue* queue){
         elevator->justStopped = 1;
 
         if(elevator->currentFloor == -1){
-            elevator->targetFloor = -1; //burde vi ha denne??
+            elevator->targetFloor = -1;
         }
     }
 }

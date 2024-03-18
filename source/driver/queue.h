@@ -8,9 +8,8 @@ typedef struct Queue {
 } Queue;
 
 void queueInit(Queue* queue);
-void printQueue(Queue* queue);
 void addToQueue(Queue* queue);
-void removeFromQueue(Elevator* elevator, Queue* queue, int floor);
+void removeFromQueue(Elevator* elevator, Queue* queue);
 void removeAll(Queue* queue);
 void checkQueue(Elevator* elevator, Door* door, Queue* queue);
 void checkForEmptyQueue(Elevator* elevator, Queue* queue);

@@ -11,16 +11,6 @@ void queueInit(Queue* queue){
     }
 }
 
-void printQueue(Queue* queue){
-    for(int i = 0; i < 4; i++){
-        for(int j = 0; j < 3; j++){
-            printf("%d ", queue->queuesystem[i][j]);
-        }
-        printf("\n");
-    }
-    printf("\n");
-}
-
 void addToQueue(Queue* queue){
     for(int f = 0; f < N_FLOORS; f++){
             for(int b = 0; b < N_BUTTONS; b++){
@@ -33,10 +23,10 @@ void addToQueue(Queue* queue){
         }
 }
 
-void removeFromQueue(Elevator* elevator, Queue* queue, int floor){
+void removeFromQueue(Elevator* elevator, Queue* queue){
     if(elevator->motorDir == DIRN_STOP && elevator->currentFloor != -1){
         for(int b = 0; b < N_BUTTONS; b++){
-            queue->queuesystem[floor][b] = 0;
+            queue->queuesystem[elevator->currentFloor][b] = 0;
         }
     }
 }
@@ -52,7 +42,7 @@ void removeAll(Queue* queue){
 void checkQueue(Elevator* elevator, Door* door, Queue* queue){
     for(int f = 0; f < N_FLOORS; f++){
         for(int b = 0; b < N_BUTTONS; b++){
-            if(elevator->queueEmpty == 1 && elevator->currentFloor == -1 && elevator->hasUsedStopButton == true){ //elevator->isEmptyQueue == 1 && 
+            if(elevator->queueEmpty == 1 && elevator->currentFloor == -1 && elevator->hasUsedStopButton == true){
                 elevator->targetFloor = -1;
             }
 

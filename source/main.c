@@ -8,7 +8,6 @@
 #include "driver/queue.h"
 #include "driver/elevator.h"
 
-
 int main(){
     elevio_init();
     
@@ -27,11 +26,9 @@ int main(){
     elevator.hasInitialised = false;
     elevator.motorDir = DIRN_STOP;
     elevator.door = door;
-    elevator.hasMoved = 0;
 
     Queue queue;
     queueInit(&queue);
-    printQueue(&queue);
 
     while(1){
         setFloor(&elevator);
@@ -40,9 +37,8 @@ int main(){
         openWhenStopped(&elevator, &door);
         setLights(&elevator, &door);
         addToQueue(&queue);
-        //printQueue(&queue);
         checkQueue(&elevator, &door, &queue);
-        removeFromQueue(&elevator, &queue, elevator.lastFloorStopped);
+        removeFromQueue(&elevator, &queue);
         shouldDoorStayOpen(&elevator, &door);
         checkObstruction(&door);
         checkForEmptyQueue(&elevator, &queue);
